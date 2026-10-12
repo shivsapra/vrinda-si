@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="midnight-nature">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>VRINDA AI — Your Personal AI Companion</title>
+  <meta name="description" content="VRINDA AI is a peaceful, nature-inspired personal AI companion for learning, coding, planning, and creativity.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='%2310b981'/><path d='M16 6 C16 14 10 18 8 24 C14 24 24 22 24 14 C24 9 18 7 16 6 Z' fill='%23091a11'/></svg>">
+  
+  <!-- Google Fonts: Plus Jakarta Sans, JetBrains Mono, Caveat & Kalam for Handwritten Notes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Kalam:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Highlight.js CSS for syntax highlighting -->
+  <link rel="stylesheet" href="assets/vendor/highlight.css">
+
+  <!-- Core Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Vendor Scripts (Local offline builds) -->
+  <script src="assets/vendor/marked.min.js"></script>
+  <script src="assets/vendor/highlight.min.js"></script>
+</head>
+<body>
+  <!-- App Container -->
+  <div id="app-root" class="app-layout">
+
+    <!-- DESKTOP / TABLET SIDEBAR -->
+    <aside id="main-sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-badge" id="brand-logo-btn">
+          <div class="brand-icon-wrapper">
+            <!-- Botanical Leaf Emblem SVG -->
+            <svg class="brand-leaf-svg" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 4C18 14 10 19 7 28C14 28 27 25 28 14C28 8 20.5 5.5 18 4Z" fill="var(--color-primary-accent)" />
+              <path d="M18 10C18 17 13 21 11 26C15 26 23 24 24 16C24 12 19.5 11 18 10Z" fill="var(--color-secondary-accent)" opacity="0.85" />
+              <path d="M12 28C15 23 18 18 20 12" stroke="var(--color-bg)" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <span class="brand-title">VRINDA <span class="ai-pill">AI</span></span>
+            <span class="brand-tagline">Your Personal AI Companion</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action: New Chat -->
+      <div class="sidebar-quick-action">
+        <button id="btn-sidebar-new-chat" class="btn-new-chat" title="Start a fresh conversation">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          <span>New Chat</span>
+        </button>
+      </div>
+
+      <!-- Main Navigation Links -->
+      <nav class="sidebar-nav" aria-label="Main Navigation">
+        <button id="nav-btn-home" class="nav-item active" data-view="home">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Home</span>
+        </button>
+
+        <button id="nav-btn-chat" class="nav-item" data-view="chat">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Chat</span>
+          <span id="sidebar-chat-count" class="badge-count">0</span>
+        </button>
+
+        <button id="nav-btn-tune" class="nav-item" data-view="tune">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <span>My Tune</span>
+          <span id="active-tune-indicator" class="pill-mini">Natural</span>
+        </button>
+
+        <button id="nav-btn-modes" class="nav-item" data-view="modes">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          <span>Modes</span>
+          <span class="pill-mini" style="background:var(--color-primary-accent);color:var(--color-accent-text);font-weight:700;">3 Modes</span>
+        </button>
+
+        <button id="nav-btn-settings" class="nav-item" data-view="settings">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>Settings</span>
+        </button>
+
+        <button id="nav-btn-about" class="nav-item" data-view="about">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <span>About Us</span>
+        </button>
+
+        <button id="nav-btn-offline" class="nav-item" data-view="offline" title="100% Offline Vault & Timer">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Offline Vault</span>
+          <span class="offline-pulse-dot" style="margin-left:auto;"></span>
+        </button>
+      </nav>
+
+      <!-- Sidebar History Section -->
+      <div class="sidebar-history-container">
+        <div class="history-section-header">
+          <span>Recent Conversations</span>
+        </div>
+        <div id="sidebar-history-list" class="sidebar-history-list">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- User Profile Card -->
+      <div class="sidebar-footer">
+        <div class="user-profile-card" id="user-profile-trigger">
+          <div class="avatar-circle" id="user-avatar-initials">S</div>
+          <div class="user-meta">
+            <span class="user-name" id="sidebar-display-name">Shiv</span>
+            <span class="user-status-text"><span class="status-dot"></span> Online • Ready</span>
+          </div>
+          <button id="btn-theme-quick-cycle" class="btn-icon-ghost" title="Cycle visual theme">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN VIEWPORT CONTAINER -->
+    <main class="main-content" id="main-content">
+
+      <!-- MOBILE TOP BAR -->
+      <header class="mobile-header" id="mobile-header">
+        <button id="btn-mobile-menu" class="mobile-menu-btn" aria-label="Open sidebar menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+
+        <div class="mobile-brand">
+          <svg class="mobile-leaf-svg" viewBox="0 0 36 36" fill="none">
+            <path d="M18 4C18 14 10 19 7 28C14 28 27 25 28 14C28 8 20.5 5.5 18 4Z" fill="var(--color-primary-accent)" />
+          </svg>
+          <span class="mobile-title">VRINDA AI</span>
+        </div>
+
+        <div class="mobile-header-actions">
+          <button id="btn-mobile-new-chat" class="mobile-icon-btn" title="New Chat">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- ============================================== -->
+      <!-- VIEW 1: HOME / MAIN DASHBOARD                 -->
+      <!-- ============================================== -->
+      <section id="view-home" class="view-panel active">
+        <div class="home-wrapper">
+          
+          <!-- Hero Greeting -->
+          <div class="home-hero">
+            <div class="botanical-emblem-hero">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="30" stroke="var(--color-border)" stroke-width="1.5" />
+                <path d="M32 10C32 25 18 33 13 47C25 47 47 43 49 25C49 16 36 12 32 10Z" fill="var(--color-primary-accent)" />
+                <path d="M32 19C32 30 23 37 19 45C26 45 40 42 42 29C42 22 34 20 32 19Z" fill="var(--color-secondary-accent)" opacity="0.9" />
+                <path d="M21 47C26 39 32 31 36 21" stroke="var(--color-bg)" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            
+            <h1 class="hero-greeting" id="hero-greeting-text">Hey Shiv! 🌿</h1>
+            <p class="hero-subtitle">How can I help you today?</p>
+            
+            <div class="hero-badges">
+              <span class="badge-pill">Ask</span>
+              <span class="badge-dot">•</span>
+              <span class="badge-pill">Learn</span>
+              <span class="badge-dot">•</span>
+              <span class="badge-pill">Create</span>
+              <span class="badge-dot">•</span>
+              <span class="badge-pill">Grow</span>
+            </div>
+          </div>
+
+          <!-- Prominent AI Input Box on Home -->
+          <div class="home-input-card">
+            <div class="input-box-container">
+              <textarea 
+                id="home-main-input" 
+                class="ai-input" 
+                placeholder="Ask VRINDA anything... (e.g. explain quantum computing, debug Python code, create a 7-day study plan)" 
+                rows="2"
+              ></textarea>
+              <div class="input-actions-bar">
+                <div class="input-meta-hint">
+                  <span>Press <kbd>Enter ↵</kbd> to send • <kbd>Shift+Enter</kbd> for new line</span>
+                </div>
+                <div class="input-buttons">
+                  <button id="home-send-btn" class="btn-send" title="Send Message">
+                    <span>Send</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Suggested Cards Grid -->
+          <div class="dashboard-cards-section">
+            <h2 class="section-title">Suggested Pathways</h2>
+            
+            <div class="cards-grid">
+              <!-- Card 1: Study Assistant -->
+              <div class="feature-card" data-category="study">
+                <div class="card-icon-banner">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                  <span class="card-tag">Academics & Clarity</span>
+                </div>
+                <h3 class="card-title">Study Assistant</h3>
+                <p class="card-desc">Master concepts with clear breakdowns, analogies, and structured summaries.</p>
+                <div class="card-sub-actions">
+                  <button class="card-pill-btn" data-prompt="Explain difficult topics in simple terms with intuitive analogies.">Explain difficult topics</button>
+                  <button class="card-pill-btn" data-prompt="Summarize my lecture notes into clear bullet points and key takeaways.">Summarize notes</button>
+                  <button class="card-pill-btn" data-prompt="Help me break down and solve this assignment problem step-by-step.">Help with assignments</button>
+                </div>
+              </div>
+
+              <!-- Card 2: Code & Build -->
+              <div class="feature-card" data-category="code">
+                <div class="card-icon-banner">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                  <span class="card-tag">Engineering</span>
+                </div>
+                <h3 class="card-title">Code & Build</h3>
+                <p class="card-desc">Write robust algorithms, diagnose cryptic stack traces, and understand architectures.</p>
+                <div class="card-sub-actions">
+                  <button class="card-pill-btn" data-prompt="Write clean, modern, well-commented code for...">Write code</button>
+                  <button class="card-pill-btn" data-prompt="Help me debug this error and identify the root cause:">Debug errors</button>
+                  <button class="card-pill-btn" data-prompt="Explain this programming concept from fundamental principles:">Explain concepts</button>
+                </div>
+              </div>
+
+              <!-- Card 3: Plan & Organize -->
+              <div class="feature-card" data-category="plan">
+                <div class="card-icon-banner">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  <span class="card-tag">Productivity</span>
+                </div>
+                <h3 class="card-title">Plan & Organize</h3>
+                <p class="card-desc">Craft balanced routines, prioritize demanding goals, and organize messy schedules.</p>
+                <div class="card-sub-actions">
+                  <button class="card-pill-btn" data-prompt="Create a balanced 7-day productivity and study schedule.">Create schedules</button>
+                  <button class="card-pill-btn" data-prompt="Organize these chaotic tasks using priority frameworks:">Organize tasks</button>
+                  <button class="card-pill-btn" data-prompt="Help me plan a 30-day realistic roadmap to achieve my goal:">Plan goals</button>
+                </div>
+              </div>
+
+              <!-- Card 4: Creative Mode -->
+              <div class="feature-card" data-category="creative">
+                <div class="card-icon-banner">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                  <span class="card-tag">Ideation & Writing</span>
+                </div>
+                <h3 class="card-title">Creative Mode</h3>
+                <p class="card-desc">Brainstorm compelling concepts, refine tone, and produce vivid written content.</p>
+                <div class="card-sub-actions">
+                  <button class="card-pill-btn" data-prompt="Generate 5 novel, innovative ideas for...">Generate ideas</button>
+                  <button class="card-pill-btn" data-prompt="Write engaging, polished content about...">Write content</button>
+                  <button class="card-pill-btn" data-prompt="Help me brainstorm unique angles and storytelling hooks:">Brainstorming</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Chats Section on Home -->
+          <div class="home-recents-section" id="home-recents-container">
+            <div class="section-header-flex">
+              <h2 class="section-title">Jump Back In</h2>
+              <button id="btn-home-view-all-chats" class="btn-text-link">View all in Chat ➔</button>
+            </div>
+            <div id="home-recent-chats-list" class="recent-cards-row">
+              <!-- Dynamically inserted -->
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- VIEW 2: CHAT INTERFACE                         -->
+      <!-- ============================================== -->
+      <section id="view-chat" class="view-panel">
+        <div class="chat-layout">
+          
+          <!-- Chat Top Header -->
+          <div class="chat-header-bar">
+            <div class="chat-header-left">
+              <div class="chat-title-group">
+                <h2 id="current-chat-title" class="current-chat-title" contenteditable="false">New Conversation</h2>
+                <button id="btn-rename-current-chat" class="btn-icon-subtle" title="Rename this conversation">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                </button>
+              </div>
+              <div class="chat-meta-pills">
+                <span id="chat-active-tone-badge" class="chat-pill" title="Click to adjust tone">Tone: Natural 🌿</span>
+                <span id="chat-model-badge" class="chat-pill-model">Gemini 3.5 Flash</span>
+              </div>
+            </div>
+
+            <div class="chat-header-actions">
+              <button id="btn-chat-new" class="btn-chat-action" title="Start a fresh chat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span>New</span>
+              </button>
+              <button id="btn-export-chat" class="btn-chat-action" title="Export this chat as Markdown">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Export</span>
+              </button>
+              <button id="btn-clear-chat" class="btn-chat-action btn-danger-action" title="Clear messages in this chat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                <span>Clear</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Chat Messages Scroll Area -->
+          <div id="chat-messages-container" class="chat-messages-container">
+            <!-- Messages rendered dynamically -->
+          </div>
+
+          <!-- Chat Input Dock -->
+          <div class="chat-input-dock">
+            <div class="chat-input-wrapper">
+              <textarea 
+                id="chat-main-input" 
+                class="chat-textarea" 
+                placeholder="Ask VRINDA anything... (Press Enter to send, Shift+Enter for new line)" 
+                rows="1"
+              ></textarea>
+              <div class="dock-actions">
+                <button id="btn-chat-send" class="btn-dock-send" title="Send message">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="dock-footer-info">
+              <span class="safe-note">VRINDA AI responses are powered by Google Gemini. Verified for accuracy & clarity.</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- VIEW 3: MY TUNE (PERSONALIZED AI TONE)         -->
+      <!-- ============================================== -->
+      <section id="view-tune" class="view-panel">
+        <div class="panel-container">
+          <div class="panel-header">
+            <div class="panel-title-group">
+              <span class="panel-tag">Personalization</span>
+              <h1 class="panel-title">My Tune 🌿</h1>
+              <p class="panel-subtitle">Fine-tune VRINDA AI’s voice, personality, and explanation style to match exactly how you think and learn.</p>
+            </div>
+          </div>
+
+          <!-- Styles Grid -->
+          <div class="tune-section">
+            <h2 class="sub-heading">Choose Response Style</h2>
+            <div class="styles-grid" id="tune-styles-grid">
+              
+              <div class="tune-card active" data-style="natural">
+                <div class="tune-card-header">
+                  <div class="tune-icon-dot"></div>
+                  <span class="tune-badge">Recommended</span>
+                </div>
+                <h3 class="tune-name">Natural</h3>
+                <p class="tune-desc">Balanced, friendly, and conversational — like collaborating with a thoughtful peer.</p>
+              </div>
+
+              <div class="tune-card" data-style="friendly">
+                <div class="tune-card-header">
+                  <div class="tune-icon-dot"></div>
+                </div>
+                <h3 class="tune-name">Friendly</h3>
+                <p class="tune-desc">Warm, casual, uplifting, and approachable. Always supportive and encouraging.</p>
+              </div>
+
+              <div class="tune-card" data-style="professional">
+                <div class="tune-card-header">
+                  <div class="tune-icon-dot"></div>
+                </div>
+                <h3 class="tune-name">Professional</h3>
+                <p class="tune-desc">Clear, formal, and structured. Perfect for work projects, reports, and concise summaries.</p>
+              </div>
+
+              <div class="tune-card" data-style="simple">
+                <div class="tune-card-header">
+                  <div class="tune-icon-dot"></div>
+                </div>
+                <h3 class="tune-name">Simple</h3>
+                <p class="tune-desc">Plain language, intuitive analogies, and beginner-friendly clarity without confusing jargon.</p>
+              </div>
+
+              <div class="tune-card" data-style="detailed">
+                <div class="tune-card-header">
+                  <div class="tune-icon-dot"></div>
+                </div>
+                <h3 class="tune-name">Detailed</h3>
+                <p class="tune-desc">In-depth, comprehensive breakdowns with nuances, edge cases, and rich examples.</p>
+              </div>
+
+              <div class="tune-card" data-style="creative">
+                <div class="tune-card-header">
+                  <div class="tune-icon-dot"></div>
+                </div>
+                <h3 class="tune-name">Creative</h3>
+                <p class="tune-desc">Expressive, imaginative, vibrant, engaging, and rich with metaphors and creative angles.</p>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Custom Instructions -->
+          <div class="tune-section">
+            <h2 class="sub-heading">Custom Instructions</h2>
+            <p class="sub-desc">Provide specific rules that VRINDA AI should follow in every response:</p>
+            
+            <div class="custom-instruction-box">
+              <textarea 
+                id="tune-custom-instructions" 
+                class="tune-textarea" 
+                placeholder="e.g. Explain things in simple English, be friendly, use practical examples, and avoid unnecessary long answers."
+                rows="4"
+              ></textarea>
+              
+              <div class="preset-chips-row">
+                <span class="chips-label">Quick Presets:</span>
+                <button class="preset-chip" data-append="Explain in simple English with real-life analogies.">+ Simple English</button>
+                <button class="preset-chip" data-append="Provide answers in clear bullet points where possible.">+ Bullet Points</button>
+                <button class="preset-chip" data-append="Include practical code examples with comments.">+ Code Snippets</button>
+                <button class="preset-chip" data-append="Keep responses concise and under 3 paragraphs.">+ Concise Under 3 Paras</button>
+                <button class="preset-chip" data-append="Be encouraging and supportive.">+ Uplifting Tone</button>
+              </div>
+            </div>
+
+            <div class="tune-save-row">
+              <button id="btn-save-tune" class="btn-primary-mint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                <span>Save Preferences</span>
+              </button>
+              <span id="tune-save-status" class="save-status-text"></span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- VIEW: MODES (STUDENT SPECIALIZED SUITE)        -->
+      <!-- ============================================== -->
+      <section id="view-modes" class="view-panel">
+        <div class="modes-wrapper">
+
+          <div class="modes-hero-header">
+            <span class="modes-badge-tag">Student Intelligence Suite</span>
+            <h1 class="modes-title">Specialized Modes 🌿</h1>
+            <p class="modes-subtitle">Three purpose-built AI guidance modes for acing exams, building impressive college projects, and achieving crystal-clear career direction.</p>
+            
+            <!-- Quick Offline Vault Access -->
+            <div class="offline-quick-bar">
+              <div class="offline-bar-left">
+                <span class="offline-pulse-dot"></span>
+                <div>
+                  <div class="offline-bar-text">Offline Study Vault & Focus Timer</div>
+                  <div class="offline-bar-sub">Revise saved notes, cheat-sheets & run Pomodoro focus timer with zero internet.</div>
+                </div>
+              </div>
+              <button id="btn-modes-open-offline" class="btn-open-offline">
+                <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>Open Offline Vault 🌿</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="modes-cards-container">
+            
+            <!-- MODE 1: Syllabus Tension? -->
+            <div class="mode-card" id="mode-card-syllabus" data-mode="syllabus">
+              <div class="mode-card-header">
+                <div class="mode-icon-title-group">
+                  <div class="mode-icon-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                  </div>
+                  <div>
+                    <h2 class="mode-title-text">Mode 1: Syllabus Tension? 🎓</h2>
+                    <span class="mode-tag-pill">Exam & Syllabus Mastery</span>
+                  </div>
+                </div>
+              </div>
+
+              <p class="mode-description">
+                Overwhelmed by your syllabus or running out of time? Get realistic study blueprints, high-yield topic priorities, marks weightage breakdowns, and clear handwritten-style notes.
+              </p>
+
+              <!-- Optional Context Fields -->
+              <div class="mode-context-inputs">
+                <div class="context-field">
+                  <label for="syllabus-uni-input">University / Board (Optional)</label>
+                  <input type="text" id="syllabus-uni-input" placeholder="e.g. VTU, AKTU, Mumbai Univ, CBSE" />
+                </div>
+                <div class="context-field">
+                  <label for="syllabus-sub-input">Subject / Course Name (Optional)</label>
+                  <input type="text" id="syllabus-sub-input" placeholder="e.g. Operating Systems, Engineering Math" />
+                </div>
+              </div>
+
+              <!-- Predefined Clickable Questions -->
+              <div class="predefined-questions-list">
+                <button class="btn-predefined-q" data-mode="syllabus" data-question="How do I cover my syllabus?">
+                  <span>How do I cover my syllabus?</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+
+                <button class="btn-predefined-q" data-mode="syllabus" data-question="I don't understand this topic.">
+                  <span>I don't understand this topic.</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+
+                <button class="btn-predefined-q" data-mode="syllabus" data-question="I'm confused about what to study.">
+                  <span>I'm confused about what to study.</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+
+                <!-- HIGHLIGHTED OPTION -->
+                <button class="btn-predefined-q highlighted-last-day" data-mode="syllabus" data-question="How should I study on the last day before an exam?">
+                  <div class="highlighted-inner">
+                    <span class="sos-badge">⚡ High Priority SOS</span>
+                    <span>How should I study on the last day before an exam?</span>
+                  </div>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- MODE 2: How to Make College Projects? -->
+            <div class="mode-card" id="mode-card-projects" data-mode="projects">
+              <div class="mode-card-header">
+                <div class="mode-icon-title-group">
+                  <div class="mode-icon-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                  </div>
+                  <div>
+                    <h2 class="mode-title-text">Mode 2: How to Make College Projects? 💻</h2>
+                    <span class="mode-tag-pill">Real-World Projects & Docs</span>
+                  </div>
+                </div>
+              </div>
+
+              <p class="mode-description">
+                End-to-end guidance from ideation to submission. Discover real-world problem statements, choose the right tech stack, write code step-by-step, and generate complete project reports and synopsis files.
+              </p>
+
+              <!-- Optional Context Fields -->
+              <div class="mode-context-inputs">
+                <div class="context-field">
+                  <label for="project-domain-input">Domain / Branch (Optional)</label>
+                  <input type="text" id="project-domain-input" placeholder="e.g. Web Dev, AI/ML, IoT, Blockchain" />
+                </div>
+                <div class="context-field">
+                  <label for="project-stack-input">Tech Stack Preference (Optional)</label>
+                  <input type="text" id="project-stack-input" placeholder="e.g. Python, React, Node.js, Flutter" />
+                </div>
+              </div>
+
+              <!-- Predefined Clickable Questions -->
+              <div class="predefined-questions-list">
+                <button class="btn-predefined-q" data-mode="projects" data-question="How do I choose a project idea that solves a real-world problem?">
+                  <span>How do I choose a project idea that solves a real-world problem?</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+
+                <button class="btn-predefined-q" data-mode="projects" data-question="Which tech stack should I choose for my project?">
+                  <span>Which tech stack should I choose for my project?</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+
+                <button class="btn-predefined-q" data-mode="projects" data-question="How do I build my project step-by-step from scratch?">
+                  <span>How do I build my project step-by-step from scratch?</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+
+                <button class="btn-predefined-q" data-mode="projects" data-question="Generate a complete Project Report & Documentation template.">
+                  <span>Generate a complete Project Report & Documentation template.</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+
+                <button class="btn-predefined-q" data-mode="projects" data-question="Help me debug or structure my existing project code.">
+                  <span>Help me debug or structure my existing project code.</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- MODE 3: I'm Confused About My Career -->
+            <div class="mode-card" id="mode-card-career" data-mode="career">
+              <div class="mode-card-header">
+                <div class="mode-icon-title-group">
+                  <div class="mode-icon-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                  </div>
+                  <div>
+                    <h2 class="mode-title-text">Mode 3: I'm Confused About My Career 🧭</h2>
+                    <span class="mode-tag-pill">Personalized Career Roadmap</span>
+                  </div>
+                </div>
+              </div>
+
+              <p class="mode-description">
+                Stuck between choices or unsure how to land your first role? Tell VRINDA your interests and background to get a step-by-step learning roadmap, free course certifications, and placement preparation strategy.
+              </p>
+
+              <!-- Optional Context Fields -->
+              <div class="mode-context-inputs">
+                <div class="context-field">
+                  <label for="career-degree-input">Degree & Current Year (Optional)</label>
+                  <input type="text" id="career-degree-input" placeholder="e.g. B.Tech CSE 3rd Year, BCA 2nd Year" />
+                </div>
+                <div class="context-field">
+                  <label for="career-skills-input">Current Skills / Interests (Optional)</label>
+                  <input type="text" id="career-skills-input" placeholder="e.g. Java, Python, Web Design, UI/UX" />
+                </div>
+              </div>
+
+              <!-- Predefined Clickable Questions -->
+              <div class="predefined-questions-list">
+                <button class="btn-predefined-q" data-mode="career" data-question="I'm confused about what career path suits my skills and interests.">
+                  <span>I'm confused about what career path suits my skills and interests.</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+
+                <button class="btn-predefined-q" data-mode="career" data-question="Give me a step-by-step roadmap for Software Engineering, AI, or Data Analyst roles.">
+                  <span>Give me a step-by-step roadmap for Software Engineering, AI, or Data Analyst roles.</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+
+                <button class="btn-predefined-q" data-mode="career" data-question="What are the best free courses and certifications for my branch?">
+                  <span>What are the best free courses and certifications for my branch?</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+
+                <button class="btn-predefined-q" data-mode="career" data-question="How do I prepare for internships and off-campus placements?">
+                  <span>How do I prepare for internships and off-campus placements?</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- VIEW 4: SETTINGS (THEMES & CUSTOMIZATION)      -->
+      <!-- ============================================== -->
+      <section id="view-settings" class="view-panel">
+        <div class="panel-container">
+          <div class="panel-header">
+            <div class="panel-title-group">
+              <span class="panel-tag">Preferences</span>
+              <h1 class="panel-title">Settings ⚙️</h1>
+              <p class="panel-subtitle">Customize your visual theme, identity, and application preferences.</p>
+            </div>
+          </div>
+
+          <!-- Section 1: User Identity -->
+          <div class="settings-card">
+            <div class="card-title-group">
+              <h2 class="settings-card-title">User Display Name</h2>
+              <p class="settings-card-subtitle">How VRINDA AI addresses you across greetings and conversations.</p>
+            </div>
+            <div class="setting-input-row">
+              <input type="text" id="setting-user-name" class="text-input" placeholder="Enter your name" maxlength="30">
+              <button id="btn-save-name" class="btn-secondary">Save Name</button>
+            </div>
+          </div>
+
+          <!-- Section 2: Visual Themes (4 Complete Themes) -->
+          <div class="settings-card">
+            <div class="card-title-group">
+              <h2 class="settings-card-title">Visual Theme</h2>
+              <p class="settings-card-subtitle">Select from four cohesive nature-inspired palettes. No dark blue or purple used.</p>
+            </div>
+
+            <div class="theme-grid" id="theme-selector-grid">
+              
+              <!-- Theme 1: Midnight Nature (Default) -->
+              <div class="theme-card active" data-theme-name="midnight-nature">
+                <div class="theme-preview-box preview-midnight">
+                  <div class="preview-palette">
+                    <span class="swatch swatch-bg" style="background:#0b0f0d;"></span>
+                    <span class="swatch swatch-card" style="background:#131916;"></span>
+                    <span class="swatch swatch-accent" style="background:#10b981;"></span>
+                    <span class="swatch swatch-text" style="background:#f1f5f3;"></span>
+                  </div>
+                  <span class="preview-tag">Default</span>
+                </div>
+                <div class="theme-info">
+                  <h3 class="theme-title">Midnight Nature</h3>
+                  <p class="theme-desc">Near-black deep charcoal, graphite cards, mint-green accents & crisp soft text.</p>
+                </div>
+              </div>
+
+              <!-- Theme 2: Soft Light -->
+              <div class="theme-card" data-theme-name="soft-light">
+                <div class="theme-preview-box preview-light">
+                  <div class="preview-palette">
+                    <span class="swatch swatch-bg" style="background:#f8faf8;"></span>
+                    <span class="swatch swatch-card" style="background:#ffffff;"></span>
+                    <span class="swatch swatch-accent" style="background:#059669;"></span>
+                    <span class="swatch swatch-text" style="background:#18231e;"></span>
+                  </div>
+                </div>
+                <div class="theme-info">
+                  <h3 class="theme-title">Soft Light</h3>
+                  <p class="theme-desc">Warm off-white background, pure white cards, sage-green accents & charcoal text.</p>
+                </div>
+              </div>
+
+              <!-- Theme 3: Forest Calm -->
+              <div class="theme-card" data-theme-name="forest-calm">
+                <div class="theme-preview-box preview-forest">
+                  <div class="preview-palette">
+                    <span class="swatch swatch-bg" style="background:#07150e;"></span>
+                    <span class="swatch swatch-card" style="background:#0d2419;"></span>
+                    <span class="swatch swatch-accent" style="background:#34d399;"></span>
+                    <span class="swatch swatch-text" style="background:#ecfdf5;"></span>
+                  </div>
+                </div>
+                <div class="theme-info">
+                  <h3 class="theme-title">Forest Calm</h3>
+                  <p class="theme-desc">Deep forest-green background, natural green surfaces & soft sage highlights.</p>
+                </div>
+              </div>
+
+              <!-- Theme 4: Natural Earth -->
+              <div class="theme-card" data-theme-name="natural-earth">
+                <div class="theme-preview-box preview-earth">
+                  <div class="preview-palette">
+                    <span class="swatch swatch-bg" style="background:#f4efe7;"></span>
+                    <span class="swatch swatch-card" style="background:#fdfbf7;"></span>
+                    <span class="swatch swatch-accent" style="background:#475e3e;"></span>
+                    <span class="swatch swatch-text" style="background:#27211b;"></span>
+                  </div>
+                </div>
+                <div class="theme-info">
+                  <h3 class="theme-title">Natural Earth</h3>
+                  <p class="theme-desc">Warm beige background, cream-colored cards, earthy olive green & rich cocoa text.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Section 3: Gemini System & Status -->
+          <div class="settings-card">
+            <div class="card-title-group">
+              <h2 class="settings-card-title">AI Engine & Backend Status</h2>
+              <p class="settings-card-subtitle">Live health and configuration details of your local VRINDA server.</p>
+            </div>
+            <div class="status-table">
+              <div class="status-row">
+                <span class="status-label">Backend Connection</span>
+                <span id="backend-health-badge" class="badge-status-online">Checking...</span>
+              </div>
+              <div class="status-row">
+                <span class="status-label">Gemini Model</span>
+                <span id="backend-model-badge" class="badge-value">gemini-3.5-flash</span>
+              </div>
+              <div class="status-row">
+                <span class="status-label">API Security</span>
+                <span class="badge-value">Protected (Stored securely in .env on server)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 4: Data & Reset -->
+          <div class="settings-card">
+            <div class="card-title-group">
+              <h2 class="settings-card-title">Data & Storage Management</h2>
+              <p class="settings-card-subtitle">Manage your local storage, exported logs, and conversation history.</p>
+            </div>
+            <div class="danger-actions-row">
+              <button id="btn-export-all-data" class="btn-secondary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Export All Conversations (.json)</span>
+              </button>
+              <button id="btn-clear-all-history" class="btn-danger">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                <span>Clear All Chat History</span>
+              </button>
+              <button id="btn-reset-preferences" class="btn-danger-outline">
+                <span>Reset All Preferences to Defaults</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- VIEW 5: ABOUT US                               -->
+      <!-- ============================================== -->
+      <section id="view-about" class="view-panel">
+        <div class="panel-container">
+          
+          <div class="about-hero-card">
+            <div class="about-brand-badge">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="24" cy="24" r="22" stroke="var(--color-border)" stroke-width="1.5"/>
+                <path d="M24 7C24 19 13 25 9 36C18 36 36 33 37 19C37 11 27 8 24 7Z" fill="var(--color-primary-accent)" />
+                <path d="M24 14C24 22 17 28 14 34C20 34 31 31 32 22C32 17 26 15 24 14Z" fill="var(--color-secondary-accent)" opacity="0.9" />
+              </svg>
+              <div class="about-hero-titles">
+                <h1 class="about-title">VRINDA AI</h1>
+                <p class="about-tagline">Your Personal AI Companion</p>
+              </div>
+            </div>
+
+            <!-- Exact requested description -->
+            <div class="about-content-box">
+              <p class="about-paragraph">
+                VRINDA AI is a personal AI companion designed to help people learn, create, solve problems, and organize their lives. With intelligent assistance and a personalized experience, VRINDA AI brings learning, productivity, and creativity together in one place.
+              </p>
+              <p class="about-paragraph vision-quote">
+                "Our vision is to make AI feel more natural, accessible, and useful in everyday life."
+              </p>
+            </div>
+
+            <!-- Connect With the Creator -->
+            <div class="creator-section">
+              <h2 class="creator-section-title">Connect With the Creator</h2>
+              
+              <div class="creator-card">
+                <div class="creator-card-left">
+                  <div class="creator-avatar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  </div>
+                  <div class="creator-details">
+                    <span class="creator-name">Shiv Sapra</span>
+                    <span class="creator-role">Creator & Architect of VRINDA AI</span>
+                  </div>
+                </div>
+
+                <!-- Clickable Instagram Link -->
+                <a 
+                  href="https://www.instagram.com/hy_starrboy/" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  class="instagram-btn"
+                  id="creator-instagram-link"
+                  title="Visit @hy_starrboy on Instagram"
+                >
+                  <svg class="instagram-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                  </svg>
+                  <span>@hy_starrboy</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Core Values -->
+            <div class="values-grid">
+              <div class="value-item">
+                <span class="value-emoji">🌿</span>
+                <span class="value-title">Peaceful Nature</span>
+                <span class="value-text">Minimalist, gentle aesthetic designed to eliminate digital fatigue and foster deep clarity.</span>
+              </div>
+              <div class="value-item">
+                <span class="value-emoji">🔒</span>
+                <span class="value-title">Privacy Focused</span>
+                <span class="value-text">Your preferences and chat history stay in your browser and on your private backend.</span>
+              </div>
+              <div class="value-item">
+                <span class="value-emoji">💡</span>
+                <span class="value-title">Adaptive Intelligence</span>
+                <span class="value-text">Google Gemini powered with personalized "My Tune" voices for every workflow.</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- MOBILE BOTTOM NAVIGATION BAR -->
+    <nav class="mobile-bottom-nav" id="mobile-bottom-nav">
+      <button class="mobile-nav-item active" data-view="home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home</span>
+      </button>
+
+      <button class="mobile-nav-item" data-view="chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>Chat</span>
+      </button>
+
+      <button class="mobile-nav-item" data-view="modes">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        <span>Modes</span>
+      </button>
+
+      <button class="mobile-nav-item" data-view="tune">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        <span>My Tune</span>
+      </button>
+
+      <button class="mobile-nav-item" data-view="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+
+    <!-- MOBILE SIDEBAR BACKDROP -->
+    <div id="mobile-sidebar-backdrop" class="sidebar-backdrop"></div>
+
+  </div> <!-- End App Layout -->
+
+  <!-- ============================================== -->
+  <!-- MODAL: FIRST-TIME WELCOME SCREEN               -->
+  <!-- ============================================== -->
+  <div id="welcome-modal-overlay" class="modal-overlay">
+    <div class="welcome-card" role="dialog" aria-modal="true" aria-labelledby="welcome-modal-title">
+      <div class="welcome-botanical-badge">
+        <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="36" cy="36" r="34" stroke="var(--color-primary-accent)" stroke-width="1.8" stroke-dasharray="4 4"/>
+          <path d="M36 12C36 28 20 37 14 52C28 52 52 48 54 28C54 18 40 14 36 12Z" fill="var(--color-primary-accent)"/>
+          <path d="M36 22C36 34 25 41 21 50C29 50 44 47 46 32C46 24 38 22 36 22Z" fill="var(--color-secondary-accent)" opacity="0.9"/>
+          <path d="M23 52C29 43 36 34 40 23" stroke="var(--color-bg)" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <h2 id="welcome-modal-title" class="welcome-title">Welcome to VRINDA AI 🌿</h2>
+      <p class="welcome-tagline">Your Personal AI Companion</p>
+      <p class="welcome-prompt">What should I call you?</p>
+
+      <form id="welcome-form" class="welcome-form">
+        <div class="welcome-input-group">
+          <input 
+            type="text" 
+            id="welcome-user-name-input" 
+            class="welcome-input" 
+            placeholder="Enter your name" 
+            maxlength="25"
+            autocomplete="given-name"
+            required
+          />
+        </div>
+        <button type="submit" id="welcome-submit-btn" class="welcome-continue-btn">
+          <span>Continue</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </form>
+
+      <p class="welcome-footer-note">Your name and preferences are kept privately in your browser.</p>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: CONFIRMATION DIALOG                     -->
+  <!-- ============================================== -->
+  <div id="confirm-modal-overlay" class="modal-overlay hidden">
+    <div class="confirm-card" role="dialog" aria-modal="true">
+      <div class="confirm-icon" id="confirm-modal-icon">⚠️</div>
+      <h3 id="confirm-modal-title" class="confirm-title">Are you sure?</h3>
+      <p id="confirm-modal-message" class="confirm-message">This action cannot be undone.</p>
+      <div class="confirm-buttons-row">
+        <button id="btn-confirm-cancel" class="btn-secondary">Cancel</button>
+        <button id="btn-confirm-action" class="btn-danger">Proceed</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: EXPERT CONTACT POPUP                    -->
+  <!-- ============================================== -->
+  <div id="expert-modal-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="expert-popup-title">
+    <div class="expert-card">
+      <button id="btn-close-expert-modal" class="expert-close-btn" aria-label="Close dialog">✕</button>
+
+      <div class="expert-header">
+        <div class="expert-emblem">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <h2 id="expert-popup-title" class="expert-title">Talk to Our Expert 🌿</h2>
+        <p id="expert-popup-subtitle" class="expert-subtitle">Direct, personal assistance for exam notes, college projects, and career roadmaps.</p>
+        
+        <div class="expert-badges-row">
+          <span class="expert-pill-tag">Free to ask 🙂</span>
+          <span class="expert-pill-tag">⚡ Reply within 1 hour</span>
+        </div>
+      </div>
+
+      <!-- Contact Channels -->
+      <div class="contact-channels-list">
+        
+        <!-- Gmail (Prioritized for College Projects) -->
+        <a 
+          href="mailto:theeesagittarius@gmail.com?subject=Need%20Help%20with%20Notes%20/%20Project%20-%20VRINDA%20AI" 
+          class="contact-card-btn" 
+          id="expert-contact-gmail"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div class="contact-card-left">
+            <div class="contact-icon-wrap" style="color:#ef4444;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div class="contact-meta">
+              <div class="contact-title-row">
+                <span class="contact-name">Email Expert (Gmail)</span>
+                <span id="gmail-priority-badge" class="priority-tag hidden">Recommended for Projects</span>
+              </div>
+              <span class="contact-detail">theeesagittarius@gmail.com</span>
+            </div>
+          </div>
+          <span class="contact-action-badge">Send Mail ✉️</span>
+        </a>
+
+        <!-- Telegram -->
+        <a 
+          href="https://t.me/Hystarboy" 
+          class="contact-card-btn" 
+          id="expert-contact-telegram"
+          target="_blank" 
+          rel="noopener noreferrer"
+        >
+          <div class="contact-card-left">
+            <div class="contact-icon-wrap" style="color:#38bdf8;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+            </div>
+            <div class="contact-meta">
+              <span class="contact-name">Telegram Chat</span>
+              <span class="contact-detail">https://t.me/Hystarboy</span>
+            </div>
+          </div>
+          <span class="contact-action-badge">Open Telegram ↗</span>
+        </a>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: HANDWRITTEN-STYLE NOTES STUDIO          -->
+  <!-- ============================================== -->
+  <div id="notes-modal-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="notes-studio-title">
+    <div class="notes-studio-card">
+      <div class="notes-studio-topbar">
+        <div class="notes-topbar-title">
+          <span>📝 Handwritten Notes Studio</span>
+        </div>
+        <div class="notes-studio-actions">
+          <button id="btn-save-note-offline" class="btn-chat-action" title="Save to local offline vault">
+            <span>💾 Save to Offline Vault</span>
+          </button>
+          <button id="btn-download-note-image" class="btn-primary-mint" style="padding:6px 14px;font-size:0.82rem;">
+            <span>📥 Download PNG</span>
+          </button>
+          <button id="btn-print-note-pdf" class="btn-chat-action">
+            <span>🖨️ Print / PDF</span>
+          </button>
+          <button id="btn-close-notes-modal" class="btn-icon-subtle" style="margin-left:6px;" aria-label="Close notes modal">✕</button>
+        </div>
+      </div>
+
+      <div class="notes-scroll-viewport">
+        <!-- Ruled Notebook Page -->
+        <div id="ruled-notebook-paper" class="ruled-notebook-sheet">
+          <div class="notebook-header-block">
+            <span id="notebook-uni-name">VRINDA AI • EXAM REVISION NOTES</span>
+            <span id="notebook-date-text">DATE: 12-10-2026</span>
+          </div>
+          <h2 id="notebook-topic-heading" class="notebook-topic-title">Exam High-Yield Study Notes</h2>
+          <div id="notebook-body-content" class="notebook-body-text">
+            Generating realistic handwritten notes...
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: OFFLINE STUDY VAULT & FOCUS TIMER       -->
+  <!-- ============================================== -->
+  <div id="offline-modal-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="offline-vault-title">
+    <div class="offline-vault-card">
+      <div class="offline-vault-header">
+        <div class="offline-vault-title">
+          <svg style="width:22px;height:22px;color:var(--color-primary-accent);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span id="offline-vault-title">Offline Study Vault & Focus Timer</span>
+          <span class="offline-status-badge">🟢 100% Offline (No Internet Needed)</span>
+        </div>
+        <button id="btn-close-offline-modal" class="btn-icon-subtle" aria-label="Close offline vault">✕</button>
+      </div>
+
+      <div class="offline-vault-body">
+        
+        <!-- Offline Pomodoro Timer -->
+        <div class="offline-timer-block">
+          <div class="timer-left">
+            <span class="timer-label">Pomodoro Focus Timer (Offline)</span>
+            <span id="offline-timer-display" class="timer-digits">25:00</span>
+          </div>
+          <div class="timer-controls">
+            <button id="btn-timer-start-toggle" class="btn-timer-action btn-timer-start">Start Focus</button>
+            <button id="btn-timer-reset" class="btn-timer-action btn-timer-reset">Reset (25m)</button>
+          </div>
+        </div>
+
+        <!-- Offline Saved Notes Pocket -->
+        <div class="offline-notes-section">
+          <div class="offline-sec-title">
+            <span>Saved Offline Notes Pocket</span>
+            <span id="offline-notes-count" class="pill-mini">0 Saved</span>
+          </div>
+          <div id="offline-notes-container" class="offline-notes-grid">
+            <!-- Populated via JavaScript -->
+          </div>
+        </div>
+
+        <!-- Preloaded Offline Quick Revision Cheat-Sheets -->
+        <div class="offline-notes-section">
+          <div class="offline-sec-title">
+            <span>Preloaded Offline Cheat-Sheets</span>
+          </div>
+          <div class="offline-notes-grid">
+            <div class="offline-note-item">
+              <div class="offline-note-top">
+                <span class="offline-note-title">⚡ Exam Last-Day Survival Checklist</span>
+                <span class="pill-mini">Built-in</span>
+              </div>
+              <p class="offline-note-snippet">1. Review previous year 5-year question patterns. 2. Memorize core formulas and standard diagrams first. 3. Avoid learning whole new chapters; reinforce high-weightage topics.</p>
+              <div class="offline-note-actions">
+                <button class="btn-offline-mini btn-view-preloaded" data-cheat="last-day">View Full Cheat Sheet</button>
+              </div>
+            </div>
+
+            <div class="offline-note-item">
+              <div class="offline-note-top">
+                <span class="offline-note-title">📑 College Project Report 8-Section Master Template</span>
+                <span class="pill-mini">Built-in</span>
+              </div>
+              <p class="offline-note-snippet">Standard IEEE / University format: 1. Abstract 2. Problem Statement 3. Literature Survey 4. System Architecture 5. Tech Stack 6. Implementation 7. Results 8. Future Scope.</p>
+              <div class="offline-note-actions">
+                <button class="btn-offline-mini btn-view-preloaded" data-cheat="project-template">View Full Cheat Sheet</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- TOAST NOTIFICATION CONTAINER                   -->
+  <!-- ============================================== -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- App Core JavaScript -->
+  <script src="app.js"></script>
+</body>
+</html>
